@@ -1,5 +1,3 @@
-import 'react-native-gesture-handler';
-import 'react-native-get-random-values';
 import React from 'react';
 import { NavigationContainer, DefaultTheme, Theme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';

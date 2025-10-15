@@ -11,11 +11,9 @@ Aplicativo mobile construído com React Native + TypeScript e Expo inspirado na 
 
 ## ▶️ Executando o projeto
 
-O projeto está configurado para o Expo SDK 54 e compatível com a versão mais recente do Expo Go.
-
 ```bash
 npm install
-npx expo start -c
+npm run start
 ```
 
 Use o Expo Go ou um emulador iOS/Android para visualizar o app.
