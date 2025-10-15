@@ -1,17 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
-import {
-  Alert,
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import type { ListRenderItem } from 'react-native';
+import React from 'react';
+import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation, CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors } from '@theme/colors';
@@ -40,12 +30,7 @@ const AddCatalogScreen: React.FC = () => {
   const [products, setProducts] = React.useState<CatalogProduct[]>([]);
   const [saving, setSaving] = React.useState(false);
 
-  const normalizedColors = useMemo<string[]>(() => {
-    const [primary, secondary, tertiary] = selectedColors;
-    return [primary ?? '#1089ED', secondary, tertiary];
-  }, [selectedColors]);
-
-  const handlePickLogo = useCallback(async () => {
+  const handlePickLogo = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permission.status !== 'granted') {
       Alert.alert('Permissão necessária', 'Autorize o acesso à galeria para selecionar uma logo.');
@@ -62,35 +47,33 @@ const AddCatalogScreen: React.FC = () => {
     if (!result.canceled) {
       setLogoUri(result.assets[0]?.uri);
     }
-  }, []);
+  };
 
-  const handleAddProduct = useCallback(() => {
-    setProducts((prev) => {
-      if (prev.length >= FREE_PRODUCT_LIMIT) {
-        Alert.alert('Limite atingido', 'Faça upgrade para o plano premium para adicionar mais produtos.');
-        return prev;
+  const handleAddProduct = () => {
+    if (products.length >= FREE_PRODUCT_LIMIT) {
+      Alert.alert('Limite atingido', 'Faça upgrade para o plano premium para adicionar mais produtos.');
+      return;
+    }
+
+    setProducts((prev) => [
+      ...prev,
+      {
+        id: generateProductId(),
+        name: '',
+        price: 0
       }
+    ]);
+  };
 
-      return [
-        ...prev,
-        {
-          id: generateProductId(),
-          name: '',
-          price: 0
-        }
-      ];
-    });
-  }, []);
-
-  const handleUpdateProduct = useCallback((productId: string, data: CatalogProduct) => {
+  const handleUpdateProduct = (productId: string, data: CatalogProduct) => {
     setProducts((prev) => prev.map((item) => (item.id === productId ? data : item)));
-  }, []);
+  };
 
-  const handleRemoveProduct = useCallback((productId: string) => {
+  const handleRemoveProduct = (productId: string) => {
     setProducts((prev) => prev.filter((item) => item.id !== productId));
-  }, []);
+  };
 
-  const handleSaveCatalog = useCallback(async () => {
+  const handleSaveCatalog = async () => {
     if (!name.trim()) {
       Alert.alert('Informe um nome', 'Dê um nome para o seu catálogo.');
       return;
@@ -101,7 +84,7 @@ const AddCatalogScreen: React.FC = () => {
       const newCatalog: Omit<Catalog, 'id' | 'createdAt' | 'updatedAt'> = {
         name: name.trim(),
         logoUri,
-        colors: normalizedColors,
+        colors: [selectedColors[0] ?? '#1089ED', selectedColors[1], selectedColors[2]],
         products
       };
       const catalogId = addCatalog(newCatalog);
@@ -120,103 +103,72 @@ const AddCatalogScreen: React.FC = () => {
     } finally {
       setSaving(false);
     }
-  }, [addCatalog, logoUri, navigation, normalizedColors, name, products]);
+  };
 
-  const previewCatalog = useMemo<Catalog>(
-    () => ({
-      id: 'preview',
-      name: name || 'Prévia do Catálogo',
-      logoUri,
-      colors: normalizedColors,
-      products,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }),
-    [logoUri, name, normalizedColors, products]
-  );
-
-  const renderProduct = useCallback<ListRenderItem<CatalogProduct>>(
-    ({ item }) => (
-      <ProductForm
-        product={item}
-        onChange={(data) => handleUpdateProduct(item.id, data)}
-        onRemove={() => handleRemoveProduct(item.id)}
-      />
-    ),
-    [handleRemoveProduct, handleUpdateProduct]
-  );
-
-  const keyExtractor = useCallback((item: CatalogProduct) => item.id, []);
-
-  const headerComponent = useMemo(
-    () => (
-      <View>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Informações gerais</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nome do catálogo"
-            placeholderTextColor={colors.mutedText}
-            value={name}
-            onChangeText={setName}
-          />
-          <TouchableOpacity style={styles.logoButton} onPress={handlePickLogo}>
-            {logoUri ? (
-              <Image source={{ uri: logoUri }} style={styles.logoPreview} />
-            ) : (
-              <Text style={styles.logoText}>Adicionar logo</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.section}>
-          <ColorSelector selectedColors={selectedColors} onChange={setSelectedColors} />
-        </View>
-
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Produtos</Text>
-          <Text style={styles.sectionCaption}>
-            {products.length}/{FREE_PRODUCT_LIMIT}
-          </Text>
-        </View>
-      </View>
-    ),
-    [handlePickLogo, logoUri, name, products.length, selectedColors]
-  );
-
-  const footerComponent = useMemo(
-    () => (
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.addProductButton} onPress={handleAddProduct}>
-          <Text style={styles.addProductText}>Adicionar produto</Text>
-        </TouchableOpacity>
-
-        <CatalogPreview catalog={previewCatalog} />
-
-        <TouchableOpacity
-          style={[styles.saveButton, saving && styles.saveButtonDisabled]}
-          onPress={handleSaveCatalog}
-          disabled={saving}
-        >
-          <Text style={styles.saveButtonText}>{saving ? 'Salvando...' : 'Salvar catálogo'}</Text>
-        </TouchableOpacity>
-      </View>
-    ),
-    [handleAddProduct, handleSaveCatalog, previewCatalog, saving]
-  );
+  const previewCatalog: Catalog = {
+    id: 'preview',
+    name: name || 'Prévia do Catálogo',
+    logoUri,
+    colors: [selectedColors[0] ?? '#1089ED', selectedColors[1], selectedColors[2]],
+    products,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
 
   return (
-    <FlatList
-      data={products}
-      keyExtractor={keyExtractor}
-      renderItem={renderProduct}
-      ListHeaderComponent={headerComponent}
-      ListFooterComponent={footerComponent}
-      style={styles.container}
-      contentContainerStyle={styles.listContent}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    />
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Informações gerais</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Nome do catálogo"
+          placeholderTextColor={colors.mutedText}
+          value={name}
+          onChangeText={setName}
+        />
+        <TouchableOpacity style={styles.logoButton} onPress={handlePickLogo}>
+          {logoUri ? (
+            <Image source={{ uri: logoUri }} style={styles.logoPreview} />
+          ) : (
+            <Text style={styles.logoText}>Adicionar logo</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
+        <ColorSelector selectedColors={selectedColors} onChange={setSelectedColors} />
+      </View>
+
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Produtos</Text>
+        <Text style={styles.sectionCaption}>
+          {products.length}/{FREE_PRODUCT_LIMIT}
+        </Text>
+      </View>
+
+      {products.map((product) => (
+        <ProductForm
+          key={product.id}
+          product={product}
+          onChange={(data) => handleUpdateProduct(product.id, data)}
+          onRemove={() => handleRemoveProduct(product.id)}
+        />
+      ))}
+
+      <TouchableOpacity style={styles.addProductButton} onPress={handleAddProduct}>
+        <Text style={styles.addProductText}>Adicionar produto</Text>
+      </TouchableOpacity>
+
+      <CatalogPreview catalog={previewCatalog} />
+
+      <TouchableOpacity
+        style={[styles.saveButton, saving && styles.saveButtonDisabled]}
+        onPress={handleSaveCatalog}
+        disabled={saving}
+      >
+        <Text style={styles.saveButtonText}>{saving ? 'Salvando...' : 'Salvar catálogo'}</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
@@ -225,7 +177,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background
   },
-  listContent: {
+  content: {
     padding: 20,
     paddingBottom: 120
   },
@@ -287,9 +239,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_600SemiBold',
     color: colors.primary,
     fontSize: 15
-  },
-  footer: {
-    paddingTop: 8
   },
   saveButton: {
     marginTop: 28,

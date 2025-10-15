@@ -1,7 +1,4 @@
-import 'react-native-gesture-handler';
-import 'react-native-get-random-values';
 import React from 'react';
-import { Buffer } from 'buffer';
 import { NavigationContainer, DefaultTheme, Theme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
@@ -12,10 +9,6 @@ import BottomTabs from '@navigation/BottomTabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ActivityIndicator, View } from 'react-native';
 import { colors } from '@theme/colors';
-
-if (typeof globalThis !== 'undefined' && !(globalThis as any).Buffer) {
-  (globalThis as any).Buffer = Buffer;
-}
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   /* noop */
