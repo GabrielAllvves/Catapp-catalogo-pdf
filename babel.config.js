@@ -3,6 +3,10 @@ module.exports = function (api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
+<<<<<<< HEAD
+=======
+      'react-native-reanimated/plugin',
+>>>>>>> def79ad25966723396227af1aac03b42a879d524
       [
         'module-resolver',
         {
@@ -17,8 +21,12 @@ module.exports = function (api) {
             '@services': './src/services'
           }
         }
+<<<<<<< HEAD
       ],
       'react-native-reanimated/plugin'
+=======
+      ]
+>>>>>>> def79ad25966723396227af1aac03b42a879d524
     ]
   };
 };

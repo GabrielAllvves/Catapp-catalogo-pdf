@@ -1,5 +1,8 @@
 import React from 'react';
+<<<<<<< HEAD
 import 'react-native-get-random-values';
+=======
+>>>>>>> def79ad25966723396227af1aac03b42a879d524
 import { NavigationContainer, DefaultTheme, Theme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';

@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import {
   View,
   FlatList,
@@ -10,6 +11,9 @@ import {
   TextInput,
   TouchableOpacity
 } from 'react-native';
+=======
+import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+>>>>>>> def79ad25966723396227af1aac03b42a879d524
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation, CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -127,7 +131,10 @@ const AddCatalogScreen: React.FC = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+<<<<<<< HEAD
       {/* Seção de informações gerais */}
+=======
+>>>>>>> def79ad25966723396227af1aac03b42a879d524
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Informações gerais</Text>
         <TextInput
@@ -146,12 +153,18 @@ const AddCatalogScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
+<<<<<<< HEAD
       {/* Seletor de cores */}
+=======
+>>>>>>> def79ad25966723396227af1aac03b42a879d524
       <View style={styles.section}>
         <ColorSelector selectedColors={selectedColors} onChange={setSelectedColors} />
       </View>
 
+<<<<<<< HEAD
       {/* Cabeçalho da seção de produtos */}
+=======
+>>>>>>> def79ad25966723396227af1aac03b42a879d524
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Produtos</Text>
         <Text style={styles.sectionCaption}>
@@ -159,6 +172,7 @@ const AddCatalogScreen: React.FC = () => {
         </Text>
       </View>
 
+<<<<<<< HEAD
       {/* Lista de produtos */}
       <FlatList
         data={products}
@@ -174,14 +188,30 @@ const AddCatalogScreen: React.FC = () => {
       />
 
       {/* Botão adicionar produto */}
+=======
+      {products.map((product) => (
+        <ProductForm
+          key={product.id}
+          product={product}
+          onChange={(data) => handleUpdateProduct(product.id, data)}
+          onRemove={() => handleRemoveProduct(product.id)}
+        />
+      ))}
+
+>>>>>>> def79ad25966723396227af1aac03b42a879d524
       <TouchableOpacity style={styles.addProductButton} onPress={handleAddProduct}>
         <Text style={styles.addProductText}>Adicionar produto</Text>
       </TouchableOpacity>
 
+<<<<<<< HEAD
       {/* Prévia do catálogo */}
       <CatalogPreview catalog={previewCatalog} />
 
       {/* Botão salvar */}
+=======
+      <CatalogPreview catalog={previewCatalog} />
+
+>>>>>>> def79ad25966723396227af1aac03b42a879d524
       <TouchableOpacity
         style={[styles.saveButton, saving && styles.saveButtonDisabled]}
         onPress={handleSaveCatalog}
