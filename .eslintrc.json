@@ -1,0 +1,30 @@
+{
+  "root": true,
+  "extends": [
+    "universe/native",
+    "universe/shared/typescript-analysis"
+  ],
+  "plugins": ["react", "react-hooks", "@typescript-eslint"],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    // ⚠️ Regras úteis, mas não chatas
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-undef": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {},
+      "babel-module": {}
+    }
+  }
+}
