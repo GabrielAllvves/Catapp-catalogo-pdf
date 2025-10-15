@@ -1,0 +1,50 @@
+{
+  "name": "catapp",
+  "version": "0.1.0",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@expo-google-fonts/inter": "^0.2.4",
+    "@react-navigation/bottom-tabs": "^6.6.1",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/native-stack": "^6.9.17",
+    "expo": "~54.0.0",
+    "expo-file-system": "~20.0.0",
+    "expo-font": "~15.0.0",
+    "expo-image-picker": "~18.0.0",
+    "expo-sharing": "~15.0.0",
+    "expo-splash-screen": "~0.31.0",
+    "expo-status-bar": "~2.0.0",
+    "expo-system-ui": "~3.0.6",
+    "expo-sqlite": "~16.0.0",
+    "jimp-compact": "^0.16.1",
+    "pdf-lib": "^1.17.1",
+    "react": "18.2.0",
+    "react-native": "0.76.1",
+    "react-native-get-random-values": "^1.11.0",
+    "react-native-gesture-handler": "~2.17.0",
+    "react-native-reanimated": "~3.16.1",
+    "react-native-safe-area-context": "^4.11.0",
+    "react-native-screens": "~3.32.0",
+    "buffer": "^6.0.3",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.5",
+    "@types/node": "20.12.7",
+    "@types/react": "18.2.37",
+    "@types/react-native": "0.76.0",
+    "@types/uuid": "9.0.7",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-universe": "^12.0.0",
+    "typescript": "5.4.5"
+  }
+}
